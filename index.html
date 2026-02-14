@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Sonya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-color: #FAFAFA;
+            --text-color: #111111;
+            --accent-color: #FF3B30;
+            --font-main: 'Playfair Display', serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 10%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 800px;
+            z-index: 10;
+            position: relative;
+        }
+
+        /* Заголовок */
+        h1 {
+            font-size: 5rem;
+            line-height: 1.05;
+            font-weight: 500;
+            margin: 0 0 30px 0;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 1.2s ease forwards;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--accent-color);
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: fadeUp 1.2s ease forwards 0.3s;
+        }
+
+        .subtitle::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 1px;
+            background-color: var(--accent-color);
+            margin-left: 15px;
+        }
+
+        /* Счетчик */
+        .counter {
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fadeUp 1.2s ease forwards 0.6s;
+        }
+
+        .time-row {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: baseline;
+            color: #111;
+        }
+
+        .number {
+            font-weight: 600;
+            font-size: 2rem; 
+            margin-right: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .label {
+            font-weight: 400;
+            font-style: italic;
+            color: #555;
+            margin-right: 20px;
+        }
+
+        /* Кнопка ссылки */
+        .btn-container {
+            opacity: 0;
+            animation: fadeUp 1.2s ease forwards 0.9s;
+        }
+
+        a.btn {
+            text-decoration: none;
+            color: #000;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            padding-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        a.btn:hover {
+            border-bottom: 1px solid #000;
+            color: var(--accent-color);
+        }
+
+        /* === КНОПКА МУЗЫКИ === */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            border-color: #000;
+        }
+
+        /* Анимация вращения когда музыка играет */
+        .music-control.playing {
+            animation: spin 5s linear infinite;
+            border-color: var(--accent-color);
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Летающие смайлики */
+        .floating-emoji {
+            position: fixed;
+            bottom: -50px;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.8;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes fadeUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Мобильная версия */
+        @media (max-width: 768px) {
+            body { padding: 30px; justify-content: center; height: auto; min-height: 100vh; }
+            h1 { font-size: 3rem; margin-bottom: 20px; }
+            .subtitle { margin-bottom: 40px; }
+            .time-row { font-size: 1.5rem; flex-wrap: wrap; }
+            .number { font-size: 1.8rem; }
+            .music-control { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Самому доброму<br>человеку в мире.</h1>
+        <div class="subtitle">Level 22 Unlocked</div>
+        
+        <div class="counter" id="timer"></div>
+
+        <div class="btn-container">
+            <a href="https://t.me/valentinkimz" class="btn">Получить подарок →</a>
+        </div>
+    </div>
+
+    <audio id="player" src="song.mp3" loop></audio>
+
+    <button class="music-control" id="musicBtn" onclick="toggleMusic()">
+        🎵
+    </button>
+
+    <script>
+        // === ЛОГИКА ВРЕМЕНИ GMT+2 ===
+        function updateTimer() {
+            const nowUTC = new Date(); 
+            const offsetGMT2 = 2; 
+            const nowGMT2 = new Date(nowUTC.getTime() + (nowUTC.getTimezoneOffset() * 60000) + (offsetGMT2 * 3600000));
+
+            const birthYear = 2004;
+            const birthMonth = 1; 
+            const birthDay = 12;
+
+            let years = nowGMT2.getFullYear() - birthYear;
+            let months = nowGMT2.getMonth() - birthMonth;
+            let days = nowGMT2.getDate() - birthDay;
+            let hours = nowGMT2.getHours();
+            let minutes = nowGMT2.getMinutes();
+            let seconds = nowGMT2.getSeconds();
+
+            if (seconds < 0) { seconds += 60; minutes--; }
+            if (minutes < 0) { minutes += 60; hours--; }
+            if (hours < 0) { hours += 24; days--; }
+            if (days < 0) {
+                const prevMonth = new Date(nowGMT2.getFullYear(), nowGMT2.getMonth(), 0);
+                days += prevMonth.getDate();
+                months--;
+            }
+            if (months < 0) { months += 12; years--; }
+
+            const html = `
+                <div class="time-row"><span class="number">${years}</span> <span class="label">years</span></div>
+                <div class="time-row"><span class="number">${months}</span> <span class="label">months</span> <span class="number">${days}</span> <span class="label">days</span></div>
+                <div class="time-row"><span class="number">${hours}</span><span class="label" style="margin-right:5px">h</span> <span class="number">${minutes}</span><span class="label" style="margin-right:5px">m</span> <span class="number">${seconds}</span><span class="label">s</span></div>
+            `;
+            document.getElementById('timer').innerHTML = html;
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // === УПРАВЛЕНИЕ МУЗЫКОЙ ===
+        const audio = document.getElementById('player');
+        const btn = document.getElementById('musicBtn');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+                btn.classList.remove('playing');
+                btn.innerHTML = '🔇'; // Иконка выключенного звука
+            } else {
+                audio.play();
+                isPlaying = true;
+                btn.classList.add('playing');
+                btn.innerHTML = '🎵'; // Иконка ноты
+            }
+        }
+
+        // Автозапуск при первом клике по странице (если сама не заиграла)
+        document.body.addEventListener('click', function(e) {
+            // Если кликнули НЕ по кнопке музыки и НЕ по ссылке, то пробуем запустить
+            if (e.target.closest('.music-control') || e.target.closest('a')) return;
+            
+            if(!isPlaying){
+                audio.play().then(() => {
+                    isPlaying = true;
+                    btn.classList.add('playing');
+                }).catch(() => {});
+            }
+        }, { once: true });
+
+        // === ПРАЗДНИЧНЫЙ ДЕКОР ===
+        setInterval(() => {
+            confetti({
+                particleCount: 20,
+                spread: 50,
+                origin: { x: Math.random(), y: Math.random() * 0.5 },
+                colors: ['#FF3B30', '#FFD700', '#000000'],
+                disableForReducedMotion: true,
+                zIndex: 0
+            });
+        }, 3000);
+
+        const emojis = ['🥳', '🎉', '🎂', '❤️'];
+        function createEmoji() {
+            const el = document.createElement('div');
+            el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            el.className = 'floating-emoji';
+            el.style.left = Math.random() * 95 + 'vw'; 
+            el.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            el.style.fontSize = (Math.random() * 1 + 1.5) + 'rem';
+            document.body.appendChild(el);
+            setTimeout(() => { el.remove(); }, 10000);
+        }
+        setInterval(createEmoji, 1500);
+
+    </script>
+</body>
+</html>
